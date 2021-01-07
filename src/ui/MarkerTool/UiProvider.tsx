@@ -1,3 +1,4 @@
+import { IModelApp } from "@bentley/imodeljs-frontend";
 import { I18N } from "@bentley/imodeljs-i18n";
 import {
   AbstractWidgetProps,
@@ -12,8 +13,11 @@ import {
   ToolbarUsage,
   ToolbarOrientation,
 } from "@bentley/ui-abstract";
-import { FillCentered } from "@bentley/ui-core";
+import { ReducerRegistryInstance } from "@bentley/ui-framework";
 import React from "react";
+import { markerSlice } from "../../store";
+import { MarkerTool } from "./Tool";
+import { MarkerWidget } from "./Widget";
 
 export class MyMarkerToolProvider implements UiItemsProvider {
   public readonly id = "MyMarkerToolProvider";
@@ -21,6 +25,9 @@ export class MyMarkerToolProvider implements UiItemsProvider {
 
   public constructor(i18n: I18N) {
     MyMarkerToolProvider.i18n = i18n;
+    ReducerRegistryInstance.registerReducer("markers", markerSlice.reducer);
+    MarkerTool.namespace = IModelApp.i18n.registerNamespace("MyViewer App");
+    IModelApp.tools.register(MarkerTool);
   }
 
   public provideToolbarButtonItems(
@@ -40,11 +47,20 @@ export class MyMarkerToolProvider implements UiItemsProvider {
     return [
       ToolbarItemUtilities.createActionButton(
         "mymarkertool-test",
-        101,
+        100,
         "icon-info",
         "Window Alert",
         () => {
           window.alert("clicked");
+        }
+      ),
+      ToolbarItemUtilities.createActionButton(
+        "marker-tool",
+        101,
+        "icon-network",
+        MarkerTool.flyover,
+        () => {
+          IModelApp.tools.run(MarkerTool.toolId);
         }
       ),
     ];
@@ -65,11 +81,7 @@ export class MyMarkerToolProvider implements UiItemsProvider {
       widgets.push({
         id: "mymarker-widget",
         label: "mymarker-widget",
-        getWidgetContent: () => (
-          <FillCentered>
-            <div>{"hello world"}</div>
-          </FillCentered>
-        ),
+        getWidgetContent: () => <MarkerWidget />,
       });
     }
     return widgets;
