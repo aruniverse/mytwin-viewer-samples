@@ -1,10 +1,10 @@
 import "./App.scss";
 
-import { Viewer } from "@bentley/itwin-viewer-react";
 import React, { useEffect, useState } from "react";
 
 import AuthorizationClient from "./AuthorizationClient";
 import { Header } from "./Header";
+import { MyViewer } from "./MyViewer";
 
 const App: React.FC = () => {
   const [isAuthorized, setIsAuthorized] = useState(
@@ -62,7 +62,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="itwin-viewer-sample">
       <Header
         handleLogin={onLoginClick}
         loggedIn={isAuthorized}
@@ -71,13 +71,7 @@ const App: React.FC = () => {
       {isLoggingIn ? (
         <span>"Logging in...."</span>
       ) : (
-        isAuthorized && (
-          <Viewer
-            contextId={process.env.IMJS_CONTEXT_ID ?? ""}
-            iModelId={process.env.IMJS_IMODEL_ID ?? ""}
-            authConfig={{ oidcClient: AuthorizationClient.oidcClient }}
-          />
-        )
+        isAuthorized && <MyViewer />
       )}
     </div>
   );

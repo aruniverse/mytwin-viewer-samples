@@ -17,7 +17,20 @@ class AuthorizationClient {
       return;
     }
 
-    const scope = process.env.IMJS_AUTH_CLIENT_SCOPES ?? "";
+    const scopes = [
+      "openid",
+      "email",
+      "profile",
+      "organization",
+      "imodelhub",
+      "context-registry-service:read-only",
+      "product-settings-service",
+      "general-purpose-imodeljs-backend",
+      "imodeljs-router",
+      "urlps-third-party",
+      "imodel-extension-service-api"
+    ];
+
     const clientId = process.env.IMJS_AUTH_CLIENT_CLIENT_ID ?? "";
     const redirectUri = process.env.IMJS_AUTH_CLIENT_REDIRECT_URI ?? "";
     const postSignoutRedirectUri = process.env.IMJS_AUTH_CLIENT_LOGOUT_URI;
@@ -27,7 +40,7 @@ class AuthorizationClient {
       clientId,
       redirectUri,
       postSignoutRedirectUri,
-      scope,
+      scope: scopes.join(" "),
       responseType: "code",
     };
 
