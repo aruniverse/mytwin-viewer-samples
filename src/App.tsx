@@ -4,7 +4,9 @@ import React, { useEffect, useState } from "react";
 
 import AuthorizationClient from "./AuthorizationClient";
 import { Header } from "./Header";
-import { MyViewer } from "./MyViewer";
+import { Viewer } from "@bentley/itwin-viewer-react";
+import TankMarker from "./TankMarker";
+import { IModelJsViewProvider } from "@bentley/imodel-react-hooks";
 
 const App: React.FC = () => {
   const [isAuthorized, setIsAuthorized] = useState(
@@ -48,18 +50,30 @@ const App: React.FC = () => {
     setIsAuthorized(false);
   };
 
+  const [imjsInited, setImjsInited] = useState(false);
+  const [tankParamType, setTankParamType] = useState<"level" | "pressure">("level");
+
   return (
-    <div className="itwin-viewer-sample">
+    <div className="itwin-viewer-sample" onClick={(ev) => {
+      setTankParamType(prev => prev === "level" ? "pressure" : "level");
+    }}>
       <Header
         handleLogin={onLoginClick}
         loggedIn={isAuthorized}
         handleLogout={onLogoutClick}
       />
-      {isLoggingIn ? (
-        <span>"Logging in...."</span>
-      ) : (
-        isAuthorized && <MyViewer />
-      )}
+      {isLoggingIn
+      ? <span>"Logging in...."</span>
+      : isAuthorized && <>
+          <Viewer
+            contextId={process.env.IMJS_CONTEXT_ID!}
+            iModelId={process.env.IMJS_IMODEL_ID!}
+            authConfig={{ oidcClient: AuthorizationClient.oidcClient }}
+            onIModelAppInit={() => setImjsInited(true)}
+          />
+          {imjsInited && <IModelJsViewProvider><TankMarker tankParamType={tankParamType} /></IModelJsViewProvider>}
+        </>
+      }
     </div>
   );
 };
