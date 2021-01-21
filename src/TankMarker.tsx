@@ -1,12 +1,12 @@
 import React from "react";
 import { Marker } from "@bentley/imodel-react-hooks";
-import { useAsyncEffect } from "@bentley/react-hooks";
+import { useAsyncInterval } from "@bentley/react-hooks";
 import { Point3d } from "@bentley/geometry-core";
 
 export default function TankMarker({tankParamType}: {tankParamType: "level" | "pressure"}) {
   const [tankParamValue, setTankParamValue] = React.useState<number>();
 
-  useAsyncEffect(
+  useAsyncInterval(
     async ({ isStale, setCancel }) => {
       const aborter = new AbortController();
       setCancel(() => aborter.abort());
@@ -14,7 +14,7 @@ export default function TankMarker({tankParamType}: {tankParamType: "level" | "p
       const result = await response.json();
       if (!isStale()) setTankParamValue(result[tankParamType]);
     },
-    [tankParamType],
+    1000
   ).catch((err) => {
     if (err.name !== "AbortError") console.error(err);
   });
