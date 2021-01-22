@@ -31,7 +31,6 @@ class AuthorizationClient {
     ];
     const extraScopes = (process.env.IMJS_AUTH_CLIENT_SCOPES ?? "").split(" ");
     const scopes = [...new Set([...defaultScopes, ...extraScopes])];
-    console.log(scopes)
 
     const clientId = process.env.IMJS_AUTH_CLIENT_CLIENT_ID ?? "imodeljs-spa-samples-2686";
     const { origin } = window.location;
