@@ -1191,6 +1191,18 @@
   resolved "https://registry.yarnpkg.com/@bentley/icons-generic/-/icons-generic-1.0.31.tgz#3e041a5ac85e58ff9d57a30dcf2ef2ce1070704f"
   integrity sha512-tJGY7VCAuG8ipssBCwm00F5mPYPxgauJLUFpf4UTD4aOxEKC2zP5FwnWov4D73DZL8xH4GyLx1+5Olt9pxlJ3A==
 
+"@bentley/imodel-select-react@^2.0.6":
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/@bentley/imodel-select-react/-/imodel-select-react-2.0.6.tgz#cf6a14f567d50b157fad5d3da1fbeb81b8bceee7"
+  integrity sha512-pvTmRjTVkuNDhUdj9EZqqjaKO0V7XTzC/sXKTjnC97IIcP12d0OMfqeaTa55wRBpwmtAHtR4WW2DIt/Iw5BN7w==
+  dependencies:
+    classnames "^2.2.5"
+    i18next "^10.2.2"
+    react "^16.8.0"
+    react-dom "^16.8.0"
+    react-redux "^7.2.0"
+    redux "^4.0.3"
+
 "@bentley/imodelhub-client@^2.6.4":
   version "2.10.6"
   resolved "https://registry.yarnpkg.com/@bentley/imodelhub-client/-/imodelhub-client-2.10.6.tgz#4c70b3eb65a8ade118a2c075bbed37d5a7272e31"
@@ -10444,6 +10456,16 @@ react-dom@16.13.1:
     prop-types "^15.6.2"
     scheduler "^0.19.1"
 
+react-dom@^16.8.0:
+  version "16.14.0"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.14.0.tgz#7ad838ec29a777fb3c75c3a190f661cf92ab8b89"
+  integrity sha512-1gCeQXDLoIqMgqD3IO2Ah9bnf0w9kzhwN5q4FGnHZ67hBm9yePzB5JJAIQCc8x3pFnNlwFq4RidZggNAAkzWWw==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    scheduler "^0.19.1"
+
 react-error-overlay@^6.0.7:
   version "6.0.8"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.8.tgz#474ed11d04fc6bda3af643447d85e9127ed6b5de"
@@ -10625,7 +10647,7 @@ react@16.13.1:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
 
-react@^16.8.6:
+react@^16.8.0, react@^16.8.6:
   version "16.14.0"
   resolved "https://registry.yarnpkg.com/react/-/react-16.14.0.tgz#94d776ddd0aaa37da3eda8fc5b6b18a4c9a3114d"
   integrity sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g==
