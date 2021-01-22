@@ -37,6 +37,7 @@ class AuthorizationClient {
 
     // authority is optional and will default to Production IMS
     const oidcConfiguration: BrowserAuthorizationClientConfiguration = {
+      authority: process.env.IMJS_AUTH_AUTHORITY,
       clientId,
       redirectUri: `${origin}/signin-oidc`,
       postSignoutRedirectUri: `${origin}/signout-oidc`,
