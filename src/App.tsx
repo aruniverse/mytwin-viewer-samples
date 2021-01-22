@@ -32,19 +32,6 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!process.env.IMJS_CONTEXT_ID) {
-      throw new Error(
-        "Please add a valid context ID in the .env file and restart the application"
-      );
-    }
-    if (!process.env.IMJS_IMODEL_ID) {
-      throw new Error(
-        "Please add a valid iModel ID in the .env file and restart the application"
-      );
-    }
-  }, []);
-
-  useEffect(() => {
     if (isLoggingIn && isAuthorized) {
       setIsLoggingIn(false);
     }

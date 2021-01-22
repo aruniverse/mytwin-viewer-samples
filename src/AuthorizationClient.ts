@@ -17,7 +17,7 @@ class AuthorizationClient {
       return;
     }
 
-    const scopes = [
+    const defaultScopes = [
       "openid",
       "email",
       "profile",
@@ -28,18 +28,19 @@ class AuthorizationClient {
       "general-purpose-imodeljs-backend",
       "imodeljs-router",
       "urlps-third-party",
-      "imodel-extension-service-api"
     ];
+    const extraScopes = (process.env.IMJS_AUTH_CLIENT_SCOPES ?? "").split(" ");
+    const scopes = [...new Set([...defaultScopes, ...extraScopes])];
+    console.log(scopes)
 
-    const clientId = process.env.IMJS_AUTH_CLIENT_CLIENT_ID ?? "";
-    const redirectUri = process.env.IMJS_AUTH_CLIENT_REDIRECT_URI ?? "";
-    const postSignoutRedirectUri = process.env.IMJS_AUTH_CLIENT_LOGOUT_URI;
+    const clientId = process.env.IMJS_AUTH_CLIENT_CLIENT_ID ?? "imodeljs-spa-samples-2686";
+    const { origin } = window.location;
 
     // authority is optional and will default to Production IMS
     const oidcConfiguration: BrowserAuthorizationClientConfiguration = {
       clientId,
-      redirectUri,
-      postSignoutRedirectUri,
+      redirectUri: `${origin}/signin-oidc`,
+      postSignoutRedirectUri: `${origin}/signout-oidc`,
       scope: scopes.join(" "),
       responseType: "code",
     };
