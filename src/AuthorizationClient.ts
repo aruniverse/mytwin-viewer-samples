@@ -32,7 +32,7 @@ class AuthorizationClient {
     const extraScopes = (process.env.IMJS_AUTH_CLIENT_SCOPES ?? "").split(" ");
     const scopes = [...new Set([...defaultScopes, ...extraScopes])];
 
-    const clientId = process.env.IMJS_AUTH_CLIENT_CLIENT_ID ?? "imodeljs-spa-samples-2686";
+    const clientId = process.env.IMJS_AUTH_CLIENT_CLIENT_ID ?? "spa-hWImG3HaWprP87ReODrzkDye0";
     const { origin } = window.location;
 
     // authority is optional and will default to Production IMS
