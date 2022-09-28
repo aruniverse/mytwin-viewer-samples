@@ -3,49 +3,52 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@bentley/bentleyjs-core": "^2.6.4",
-    "@bentley/extension-client": "^2.6.4",
-    "@bentley/frontend-application-insights-client": "^2.6.4",
-    "@bentley/frontend-authorization-client": "^2.6.4",
-    "@bentley/geometry-core": "^2.6.4",
     "@bentley/icons-generic": "^1.0.13",
-    "@bentley/imodelhub-client": "^2.6.4",
-    "@bentley/imodeljs-common": "^2.6.4",
-    "@bentley/imodeljs-frontend": "^2.6.4",
-    "@bentley/imodeljs-i18n": "^2.6.4",
-    "@bentley/imodeljs-markup": "^2.6.4",
-    "@bentley/imodeljs-quantity": "^2.6.4",
-    "@bentley/itwin-client": "^2.6.4",
-    "@bentley/itwin-viewer-react": "^5.0.0",
-    "@bentley/orbitgt-core": "^2.6.4",
-    "@bentley/presentation-common": "^2.6.4",
-    "@bentley/presentation-frontend": "^2.6.4",
-    "@bentley/product-settings-client": "^2.6.4",
-    "@bentley/rbac-client": "^2.6.4",
-    "@bentley/telemetry-client": "^2.6.4",
-    "@bentley/ui-abstract": "^2.6.4",
-    "@bentley/ui-components": "^2.6.4",
-    "@bentley/ui-core": "^2.6.4",
-    "@bentley/ui-framework": "^2.6.4",
-    "@bentley/ui-ninezone": "^2.6.4",
-    "@bentley/webgl-compatibility": "^2.6.4",
-    "@svgr/webpack": "4.3.3",
+    "@itwin/core-telemetry": "^3.0.0",
+    "@itwin/appui-abstract": "^3.0.0",
+    "@itwin/appui-layout-react": "^3.0.0",
+    "@itwin/appui-react": "^3.0.0",
+    "@itwin/browser-authorization": "^0.5.1",
+    "@itwin/components-react": "^3.0.0",
+    "@itwin/core-bentley": "^3.0.0",
+    "@itwin/core-common": "^3.0.0",
+    "@itwin/core-frontend": "^3.0.0",
+    "@itwin/core-geometry": "^3.0.0",
+    "@itwin/core-i18n": "^3.0.0",
+    "@itwin/core-markup": "^3.0.0",
+    "@itwin/core-orbitgt": "^3.0.0",
+    "@itwin/core-quantity": "^3.0.0",
+    "@itwin/core-react": "^3.0.0",
+    "@itwin/geo-tools-react": "^0.2.1",
+    "@itwin/imodel-components-react": "^3.0.0",
+    "@itwin/imodel-react-hooks": "^0.1.5",
+    "@itwin/imodels-access-frontend": "^1.0.1",
+    "@itwin/imodels-client-management": "^1.0.1",
+    "@itwin/itwinui-react": "^1.16.2",
+    "@itwin/itwinui-illustrations-react": "^1.3.0",
+    "@itwin/measure-tools-react": "^0.10.1",
+    "@itwin/presentation-common": "^3.0.0",
+    "@itwin/presentation-components": "^3.0.0",
+    "@itwin/presentation-frontend": "^3.0.0",
+    "@itwin/property-grid-react": "^0.8.1",
+    "@itwin/reality-data-client": "^0.9.0",
+    "@itwin/tree-widget-react": "^0.5.0",
+    "@itwin/web-viewer-react": "^3.0.0",
+    "@itwin/webgl-compatibility": "^3.0.0",
+    "@reduxjs/toolkit": "^1.7.2",
     "history": "^4.10.1",
-    "oidc-client": "^1.10.1",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "typescript": "^3.7.2"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.0"
   },
   "devDependencies": {
-    "@bentley/react-scripts": "^3.4.1",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^10.4.4",
-    "@testing-library/user-event": "^7.1.2",
+    "@bentley/react-scripts": "^5.0.0",
     "@types/history": "^4.7.6",
-    "@types/jest": "^26.0.4",
     "@types/node": "^14.0.19",
-    "@types/react": "^16.9.0",
-    "@types/react-dom": "^16.9.0"
+    "@types/react": "^17.0.9",
+    "@types/react-dom": "^17.0.9",
+    "@types/react-redux": "^7.1.9",
+    "typescript": "~4.5.0"
   },
   "scripts": {
     "start": "react-scripts --max_old_space_size=4096 start",
@@ -60,7 +63,6 @@
     ]
   },
   "browserslist": [
-    "electron 8.0.0",
     "last 4 chrome version",
     "last 4 firefox version",
     "last 4 safari version",
@@ -69,5 +71,20 @@
     "last 4 edge version",
     "not dead",
     "not <0.2%"
-  ]
+  ],
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowAny": [
+        "@babel/*",
+        "eslint",
+        "typescript"
+      ],
+      "ignoreMissing": [
+        "@babel/*",
+        "@eslint/*",
+        "@testing-library/*",
+        "@typescript-eslint/*"
+      ]
+    }
+  }
 }
