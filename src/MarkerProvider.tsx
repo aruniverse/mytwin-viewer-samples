@@ -19,20 +19,20 @@ import {
   IModelApp,
   PrimitiveTool,
 } from "@itwin/core-frontend";
-import { Point2d, Point3d, XYAndZ } from "@itwin/core-geometry";
+import { Point2d, Point3d } from "@itwin/core-geometry";
 import { FillCentered } from "@itwin/core-react";
 import { useMarker } from "@itwin/imodel-react-hooks";
-import { Button } from "@itwin/itwinui-react";
+import { Tag } from "@itwin/itwinui-react";
 
 import { addMarker, markerSlice, removeMarker } from "./store";
 
 interface MyMarkerProps {
-  position: XYAndZ | Point3d;
+  position: Point3d;
 }
 
 const MyMarker = ({ position }: MyMarkerProps) => {
   useMarker({
-    worldLocation: position as Point3d,
+    worldLocation: position,
     size: { x: 64, y: 64 } as Point2d,
     image: "images/minecraft_cube.svg",
   });
@@ -44,13 +44,11 @@ class MarkerTool extends PrimitiveTool {
   public static override iconSpec = "icon-info";
 
   // this flyover value is actually supposed to be a key, not text. but the translator returns invalid keys
-  // For a real application, see https://www.imodeljs.org/learning/frontend/localization/
   public static override get flyover() {
     return "Marker Tool";
   }
   public override async onDataButtonDown(ev: BeButtonEvent) {
-    const { x, y, z } = ev.point;
-    StateManager.store.dispatch(addMarker({ location: { x, y, z } }));
+    StateManager.store.dispatch(addMarker({ location: ev.point }));
     return EventHandled.Yes;
   }
   public override requireWriteableTarget = () => false; // to support read-only iModels
@@ -72,17 +70,14 @@ const MarkerWidget = () => {
   return (
     <FillCentered>
       <div>
-        {locations.map(({ x, y, z }, i) => (
+        {locations.map((_pt, i) => (
           <div key={`markerDeleteDiv_${i}`}>
-            <Button
-              onClick={() => {
+            <Tag
+              key={`markerDeleteButton_${i}`}
+              onRemove={() => {
                 dispatch(removeMarker({ index: i }));
               }}
-              key={`markerDeleteButton_${i}`}
-            >
-              X
-            </Button>
-            {`Marker ${i}: x: ${x}; y: ${y}; z: ${z};`}
+            >{`Marker ${i}`}</Tag>
           </div>
         ))}
         {locations.map((loc, i) => (
@@ -99,7 +94,7 @@ export class MarkerToolProvider implements UiItemsProvider {
   public constructor() {
     if (ReducerRegistryInstance.getReducers()["markers"] === undefined) {
       ReducerRegistryInstance.registerReducer("markers", markerSlice.reducer);
-      MarkerTool.register();
+      MarkerTool.register("mytwin-viewer-samples");
     }
   }
 

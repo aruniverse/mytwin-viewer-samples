@@ -8,57 +8,60 @@ import { MeasureTools } from "@itwin/measure-tools-react";
 import { PropertyGridManager } from "@itwin/property-grid-react";
 import { TreeWidget } from "@itwin/tree-widget-react";
 import {
-  ConnectedViewerProps,
   useWebViewerInitializer,
+  ViewerAuthorizationClient,
 } from "@itwin/web-viewer-react";
 
-import { MyViewer } from "./MyViewer";
-import { TokenServerAuthClient } from "./TokenServerClient";
+import { useAuth } from "./AuthProvider";
+import { WrappedViewer } from "./WrappedViewer";
 
 const history = createBrowserHistory();
 
-const App: React.FC = () => {
-  const [accessToken, setAccessToken] = useState("");
-  const authClient = useMemo(() => new TokenServerAuthClient(), []);
-  useEffect(() => {
-    const init = async () => {
-      await authClient.initialize();
-      const token = await authClient.getAccessToken();
-      setAccessToken(token);
-    };
-    init().catch(console.error);
-  }, [authClient]);
+interface MyAppProps {
+  authClient: ViewerAuthorizationClient;
+}
 
-  const [connectedViewerProps, setConnectedViewerProps] =
-    useState<ConnectedViewerProps>({
-      iTwinId: "9eaa080f-07af-461d-b221-0f23f0256088",
-      iModelId: "51ffd4a8-d83f-47ca-8d83-713a323dbd68",
-      changeSetId: "",
-    });
+export const MyApp = ({ authClient }: MyAppProps) => {
+  const [iTwinId, setITwinId] = useState(process.env.IMJS_ITWIN_ID ?? "");
+  const [iModelId, setIModelId] = useState(process.env.IMJS_IMODEL_ID ?? "");
+  const [changeSetId, setChangeSetId] = useState(
+    process.env.IMJS_CHANGESET_ID ?? ""
+  );
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const iTwinId = urlParams.get("iTwinId") ?? "";
-    const iModelId = urlParams.get("iModelId") ?? "";
-    const changeSetId = urlParams.get("changeSetId") ?? "";
-    if (iTwinId && iModelId) {
-      setConnectedViewerProps({
-        iTwinId,
-        iModelId,
-        changeSetId,
-      });
+    if (urlParams.has("iTwinId")) {
+      setITwinId(urlParams.get("iTwinId") as string);
+    } else {
+      if (!process.env.IMJS_ITWIN_ID) {
+        throw new Error(
+          "Please add a valid iTwin ID in the .env file and restart the application or add it to the iTwinId query parameter in the url and refresh the page. See the README for more information."
+        );
+      }
+    }
+    if (urlParams.has("iModelId")) {
+      setIModelId(urlParams.get("iModelId") as string);
+    } else {
+      if (!process.env.IMJS_IMODEL_ID) {
+        throw new Error(
+          "Please add a valid iModel ID in the .env file and restart the application or add it to the iModelId query parameter in the url and refresh the page. See the README for more information."
+        );
+      }
+    }
+    if (urlParams.has("changesetId")) {
+      setChangeSetId(urlParams.get("changesetId") as string);
     }
   }, []);
 
   useEffect(() => {
-    if (connectedViewerProps) {
-      let url = `?iTwinId=${connectedViewerProps.iTwinId}&iModelId=${connectedViewerProps.iModelId}`;
-      if (connectedViewerProps.changeSetId) {
-        url = `${url}&changeSetId=${connectedViewerProps.changeSetId}`;
+    if (iTwinId && iModelId) {
+      let url = `?iTwinId=${iTwinId}&iModelId=${iModelId}`;
+      if (changeSetId) {
+        url = `${url}&changesetId=${changeSetId}`;
       }
       history.push(url);
     }
-  }, [connectedViewerProps]);
+  }, [iTwinId, iModelId, changeSetId]);
 
   const onIModelAppInit = useCallback(async () => {
     await TreeWidget.initialize();
@@ -67,26 +70,35 @@ const App: React.FC = () => {
     await GeoTools.initialize();
   }, []);
 
-  // HACK: need to initialize IModelApp earlier so we can wrap <Viewer /> with <IModelJsViewProvider />
-  useWebViewerInitializer({
-    ...connectedViewerProps,
-    authClient,
-    enablePerformanceMonitors: true,
-    onIModelAppInit,
-  });
+  const viewerProps = useMemo(
+    () => ({
+      authClient,
+      iTwinId,
+      iModelId,
+      changeSetId,
+      enablePerformanceMonitors: true,
+      onIModelAppInit,
+    }),
+    [authClient, changeSetId, iModelId, iTwinId, onIModelAppInit]
+  );
 
-  return (
-    <div style={{ height: "100vh" }}>
-      {!accessToken && (
-        <FillCentered>
-          <SvgIModelLoader style={{ height: "64px", width: "64px" }} />
-        </FillCentered>
-      )}
-      {accessToken && (
-        <MyViewer authClient={authClient} {...connectedViewerProps} />
-      )}
-    </div>
+  // HACK: need to initialize IModelApp earlier so we can wrap <Viewer /> with <IModelJsViewProvider />
+  const initialized = useWebViewerInitializer(viewerProps);
+
+  return initialized ? (
+    <WrappedViewer {...viewerProps} />
+  ) : (
+    <>{"initializing"}</>
   );
 };
 
-export default App;
+export const App = () => {
+  const { authClient } = useAuth();
+  return authClient ? (
+    <MyApp authClient={authClient} />
+  ) : (
+    <FillCentered>
+      <SvgIModelLoader style={{ height: "64px", width: "64px" }} />
+    </FillCentered>
+  );
+};

@@ -7,24 +7,19 @@ import { MeasureToolsUiItemsProvider } from "@itwin/measure-tools-react";
 import { PropertyGridUiItemsProvider } from "@itwin/property-grid-react";
 import { TreeWidgetUiItemsProvider } from "@itwin/tree-widget-react";
 import {
-  ConnectedViewerProps,
   Viewer,
-  ViewerAuthorizationClient,
   ViewerContentToolsProvider,
   ViewerNavigationToolsProvider,
   ViewerPerformance,
   ViewerStatusbarItemsProvider,
+  WebViewerProps,
 } from "@itwin/web-viewer-react";
 
 import { MarkerToolProvider } from "./MarkerProvider";
 
 import type { ScreenViewport } from "@itwin/core-frontend";
 
-interface MyViewerProps extends ConnectedViewerProps {
-  authClient: ViewerAuthorizationClient;
-}
-
-export const MyViewer = (props: MyViewerProps) => {
+export const WrappedViewer = (props: WebViewerProps) => {
   /** NOTE: This function will execute the "Fit View" tool after the iModel is loaded into the Viewer.
    * This will provide an "optimal" view of the model. However, it will override any default views that are
    * stored in the iModel. Delete this function and the prop that it is passed to if you prefer
@@ -71,7 +66,6 @@ export const MyViewer = (props: MyViewerProps) => {
       <Viewer
         {...props}
         viewCreatorOptions={viewCreatorOptions}
-        enablePerformanceMonitors={true}
         mapLayerOptions={{
           BingMaps: {
             key: "key",
